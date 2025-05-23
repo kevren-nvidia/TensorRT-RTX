@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+variables:
+  GIT_STRATEGY: clone
+
+stages:
+  - test
+
+trt_rtx:
+  stage: test
+  image: nvidia/cuda:12.9.0-cudnn-devel-ubuntu24.04
+  tags:
+    - tensorrt-runner
+  interruptible: true
+  before_script:
+    - apt-get update && apt-get install -y software-properties-common curl
+    - add-apt-repository ppa:deadsnakes/ppa -y
+    - apt-get update && apt-get install -y python3.10 python3.10-venv python3.10-dev git
+    - python3.10 -m ensurepip --upgrade
+    - update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+    - python3 -m pip install --upgrade pip
+    - export CUDA_VERSION=$(echo $CI_JOB_IMAGE | grep -oP 'cuda:\K\d+\.\d+' | sed 's/\.//')
+    - export LATEST_VERSION=$(curl -s https://urm.nvidia.com/artifactory/sw-tensorrt-generic/cicd/rel-10.12/L1_Nightly/ | grep -oP 'href="\K\d+(?=/)' | sort -n | tail -1)
+    - export TRT_URL="https://urm.nvidia.com/artifactory/sw-tensorrt-generic/cicd/rel-10.12/L1_Nightly/${LATEST_VERSION}/trt_build_x86_64_rocky8_cuda${CUDA_VERSION}_full_optimized_winjit_winjit.tar"
+    - curl -f -O $TRT_URL || echo "Primary download failed"
+    - if [ ! -f "trt_build_x86_64_rocky8_cuda${CUDA_VERSION}_full_optimized_winjit_winjit.tar" ]; then echo "Trying fallback with cuda12.9"; curl -f -O "https://urm.nvidia.com/artifactory/sw-tensorrt-generic/cicd/rel-10.12/L1_Nightly/${LATEST_VERSION}/trt_build_x86_64_rocky8_cuda12.9_full_optimized_winjit_winjit.tar"; fi
+    - tar -xvf trt_build_*.tar
+    - tar -xvf source/install/x86_64-gnu/cuda-*/release_tarfile/TensorRT-RTX-*.tar.gz
+    - export TRT_DIR=$(ls -d TensorRT-RTX-*)
+    - export LD_LIBRARY_PATH="$PWD/$TRT_DIR/lib:$LD_LIBRARY_PATH"
+    - export WHEEL_FILE=$(ls $TRT_DIR/python/tensorrt_rtx-*-cp310-none-linux_x86_64.whl)
+    - python3 -m pip install $WHEEL_FILE
+  script:
+    - python3 -m pip install -r ./demo/requirements_demo.txt
+    - python3 -m pip install -r ./demo/tests/requirements-test.txt
+    - pytest demo/tests/ -c demo/tests/pytest.ini -v --tb=short
+  only:
+    - main
+    - merge_requests
