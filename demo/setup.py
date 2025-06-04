@@ -32,6 +32,10 @@ setup(
         "polygraphy>=0.49.24",
         "packaging",
         "tensorrt-rtx>=1.0.0",
+        "sentencepiece>=0.2.0",
+        "imageio-ffmpeg",
+        "matplotlib",
+        "opencv-python-headless",
     ],
     extras_require={
         "dev": [
