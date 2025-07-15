@@ -224,7 +224,7 @@ class Engine:
 
         self.engine = engine_from_bytes(engine_bytes)
 
-        device_memory_gb = self.engine.device_memory_size / (1024**3)
+        device_memory_gb = self.engine.device_memory_size_v2 / (1024**3)
         print(f"Device memory: {device_memory_gb:.2f} GB")
         print(f"Total VRAM estimate: {(serialized_size_gb + device_memory_gb):.2f} GB")
 
@@ -264,7 +264,7 @@ class Engine:
         else:
             self.context = self.engine.create_execution_context()
             print(
-                f"[MEMORY] {self.model_name}: Using individual workspace {self.engine.device_memory_size / (1024**3):.3f} GB"
+                f"[MEMORY] {self.model_name}: Using individual workspace {self.engine.device_memory_size_v2 / (1024**3):.3f} GB"
             )
 
         time_end = time.time()
@@ -329,7 +329,7 @@ class Engine:
             self.tensors[name] = tensor
 
         total_gb = total_buffer_memory / (1024**3)
-        combined_gb = (total_buffer_memory + self.engine.device_memory_size) / (1024**3)
+        combined_gb = (total_buffer_memory + self.engine.device_memory_size_v2) / (1024**3)
         print(f"[MEMORY] Total buffers: {total_gb:.3f} GB")
         print(f"[MEMORY] Combined (buffers + engine): {combined_gb:.3f} GB")
 

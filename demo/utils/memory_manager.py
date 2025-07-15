@@ -90,7 +90,7 @@ class ModelMemoryManager:
             self.pipeline.shared_device_memory = None
 
         # Allocate memory for text_encoder's workspace
-        device_memory_size = engine.engine.device_memory_size
+        device_memory_size = engine.engine.device_memory_size_v2
         _, shared_device_memory = cudart.cudaMalloc(device_memory_size)
         self.pipeline.shared_device_memory = shared_device_memory
 
@@ -138,7 +138,7 @@ class ModelMemoryManager:
         remaining_engines = {k: v for k, v in self.pipeline.engines.items() if k != "text_encoder"}
         if remaining_engines:
             max_device_memory = max(
-                engine.engine.device_memory_size for engine in remaining_engines.values()
+                engine.engine.device_memory_size_v2 for engine in remaining_engines.values()
             )
 
             # Allocate shared memory for remaining models
@@ -174,7 +174,7 @@ class ModelMemoryManager:
 
         # Allocate device memory for this model
         start_time = time.time()
-        device_memory_size = engine.engine.device_memory_size
+        device_memory_size = engine.engine.device_memory_size_v2
         _, device_memory = cudart.cudaMalloc(device_memory_size)
         self.pipeline.shared_device_memory = device_memory
 

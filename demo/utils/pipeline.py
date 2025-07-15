@@ -157,7 +157,7 @@ class Pipeline(ABC):
         print(f"\n[MEMORY] Calculating shared workspace requirements:")
 
         for model_name, engine in self.engines.items():
-            engine_memory = engine.engine.device_memory_size
+            engine_memory = engine.engine.device_memory_size_v2
             total_engine_memory += engine_memory
             max_device_memory = max(max_device_memory, engine_memory)
 

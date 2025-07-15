@@ -30,14 +30,14 @@ import torch
 MODELS: Dict[str, Dict[str, Dict[str, Any]]] = {
     "ltx_video_t5_text_encoder": {
         "bf16": {
-            "onnx_url": "/home/scratch.gstefanakis_sw/jit_work/ltx_video/16_bit_onnx/text_encoder/text_encoder.onnx",
+            "onnx_url": "{HOME_DIR}/ltx_2b_onnx_export/ltx_video_2b_models/t5_encoder/bf16/t5_encoder.onnx", # TODO: Set this to the correct path for your ONNX model
             "input_shapes": {"input_ids": ("B", 128)},
             "input_dtypes": {"input_ids": trt.DataType.INT32},
         }
     },
     "ltx_video_transformer_2b_txt2vid": {
         "bf16": {
-            "onnx_url": "/home/scratch.gstefanakis_sw/jit_work/ltx_video/16_bit_onnx/transformer/transformer.onnx",
+            "onnx_url": "{HOME_DIR}/ltx_2b_onnx_export/ltx_video_2b_models/transformer/bf16/transformer.onnx", # TODO: Set this to the correct path for your ONNX model
             "input_shapes": {
                 "hidden_states": ("2B", "hidden_dim", 128),
                 "encoder_hidden_states": ("2B", 128, 4096),
@@ -59,7 +59,7 @@ MODELS: Dict[str, Dict[str, Dict[str, Any]]] = {
             },
         },
         "fp8": {
-            "onnx_url": "/home/scratch.gstefanakis_sw/jit_work/ltx_video/8_bit_onnx/transformer/transformer.onnx",
+            "onnx_url": "{HOME_DIR}/ltx_2b_onnx_export/ltx_video_2b_models/transformer/fp8/transformer.onnx", # TODO: Set this to the correct path for your ONNX model
             "input_shapes": {
                 "hidden_states": ("2B", "hidden_dim", 128),
                 "encoder_hidden_states": ("2B", 128, 4096),
@@ -83,7 +83,7 @@ MODELS: Dict[str, Dict[str, Dict[str, Any]]] = {
     },
     "ltx_video_transformer_2b_img2vid": {
         "bf16": {
-            "onnx_url": "/home/scratch.gstefanakis_sw/jit_work/ltx_video/16_bit_onnx/transformer_ltx_image2video/transformer_ltx_image2video.onnx",
+            "onnx_url": "{HOME_DIR}/ltx_2b_onnx_export/ltx_video_2b_models/transformer/bf16/transformer.onnx", # TODO: Set this to the correct path for your ONNX model
             "input_shapes": {
                 "hidden_states": ("2B", "hidden_dim", 128),
                 "encoder_hidden_states": ("2B", 128, 4096),
@@ -105,7 +105,7 @@ MODELS: Dict[str, Dict[str, Dict[str, Any]]] = {
             },
         },
         "fp8": {
-            "onnx_url": "/home/scratch.gstefanakis_sw/jit_work/ltx_video/8_bit_onnx/transformer_ltx_image2video/transformer_ltx_image2video.onnx",
+            "onnx_url": "{HOME_DIR}/ltx_2b_onnx_export/ltx_video_2b_models/transformer/fp8/transformer.onnx", # TODO: Set this to the correct path for your ONNX model
             "input_shapes": {
                 "hidden_states": ("2B", "hidden_dim", 128),
                 "encoder_hidden_states": ("2B", 128, 4096),
@@ -129,7 +129,7 @@ MODELS: Dict[str, Dict[str, Dict[str, Any]]] = {
     },
     "ltx_video_vae_2b_encoder": {
         "fp16": {
-            "onnx_url": "/home/scratch.gstefanakis_sw/jit_work/ltx_video/16_bit_onnx/vae_encoder/vae_encoder.onnx",
+            "onnx_url": "{HOME_DIR}/ltx_2b_onnx_export/ltx_video_2b_models/vae_encoder/fp16/vae_encoder.onnx", # TODO: Set this to the correct path for your ONNX model
             "input_shapes": {"image": (1, 3, 1, "height", "width")},
             "input_dtypes": {"image": trt.DataType.HALF},
             "output_shapes": {
@@ -139,7 +139,7 @@ MODELS: Dict[str, Dict[str, Dict[str, Any]]] = {
     },
     "ltx_video_vae_2b_decoder": {
         "fp16": {
-            "onnx_url": "/home/scratch.gstefanakis_sw/jit_work/ltx_video/16_bit_onnx/vae_decoder/vae_decoder.onnx",
+            "onnx_url": "{HOME_DIR}/ltx_2b_onnx_export/ltx_video_2b_models/vae_decoder/fp16/vae_decoder.onnx", # TODO: Set this to the correct path for your ONNX model
             "input_shapes": {
                 "latent": ("B", 128, "latent_num_frames", "latent_height", "latent_width")
             },

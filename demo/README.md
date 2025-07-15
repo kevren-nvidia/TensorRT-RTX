@@ -86,6 +86,29 @@ demo_cache/
 └── .cache_state.json                # Pipeline usage tracking for cleanup
 ```
 
+## Installation
+
+1. **Clone repository**
+   ```bash
+   git clone https://github.com/kevren-nvidia/TensorRT-RTX.git --branch dev-kevren-ltx-video-2b-txt2vid --single-branch
+   cd TensorRT-RTX/demo
+   ```
+
+2. **Install dependencies**
+   ```bash
+   python -m pip install /path/to/tensorrt-rtx/python/tensorrt_rtx-${version}-cp${py3-ver}-none-${os-ver}_x86_64.whl
+   python -m pip install -r requirements_demo.txt
+   ```
+
+3. **Set model locations**
+
+   Open utils/model_registry.py and set ONNX model paths for T5 encoder, VAE encoder/decoder, and the bf16/fp8 transformers.
+
+4. **Run example**
+   ```bash
+   python examples/run_ltx_video.py
+   ```
+
 ## Configuration
 
 ### Memory Modes
@@ -144,25 +167,6 @@ precision_config = {
     "vae_decoder": "fp16",
 }
 ```
-
-## Installation
-
-1. **Clone repository**
-   ```bash
-   git clone <repository-url>
-   cd rtx-demos
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install torch diffusers transformers
-   pip install tensorrt  # or tensorrt_rtx for latest features
-   ```
-
-3. **Run example**
-   ```bash
-   python examples/run_video_pipeline.py
-   ```
 
 ## Examples
 
